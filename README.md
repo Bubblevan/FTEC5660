@@ -48,6 +48,22 @@ DeepSeek Flash model. JPEG, PNG, GIF, and WebP inputs are accepted by the
 homework runner.
 
 
-## Homework 1 solution: 
-> to students: please fill your solution description here.
+## Homework 1 solution
 
+### Chain visualization
+
+```mermaid
+flowchart TD
+    A[Receipt images in folder] --> B[Encode each image as a data URL]
+    B --> C[LangChain multimodal prompt]
+    C --> D[DeepSeek Flash Vision model]
+    D --> E[Three extraction and review passes]
+    E --> F[Structured receipt facts]
+    F --> G[Consistency check using original item total]
+    G --> H[Decimal aggregation in Python]
+    H --> I[Two final HKD amounts]
+```
+
+### Solution description
+
+I implemented a LangChain pipeline using the required `deepseek-v4-flash-vision-exp` model. Each receipt image is converted to a Base64 data URL and sent to a multimodal prompt that extracts the final payment after rounding, the subtotal before rounding, every applicable discount amount, and the original item total as a consistency check. The pipeline performs independent extraction passes followed by a review pass, then selects the most consistent result by comparing the original item total with `subtotal + discounts`. Finally, Python's `Decimal` type sums the receipt-level values to answer both questions accurately, and the program returns exactly one HKD amount for each query without hard-coding filenames or public test answers.
